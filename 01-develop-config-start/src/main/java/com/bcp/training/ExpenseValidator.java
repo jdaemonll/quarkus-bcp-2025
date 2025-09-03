@@ -1,26 +1,35 @@
 package com.bcp.training;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class ExpenseValidator {
+  @Inject
+  ExpenseConfiguration config;
 
-    private static final boolean DEBUG_ENABLED = true;
+//  @ConfigProperty(name="debug-enabled", defaultValue = "false")
+//  private boolean debugEnabled;
+//
+//  @ConfigProperty(name="range-high")
+//  private int rangeHigh;
+//
+//  @ConfigProperty(name="range-low")
+//  int targetRangeLow;
 
-    private static final int RANGE_HIGH = 1000;
-
-    private static final int RANGE_LOW = 250;
 
     public void debugRanges() {
-        System.out.println("Range - High: " + RANGE_HIGH);
-        System.out.println("Range - Low: " + RANGE_LOW);
+        //System.out.println("Range - High: " + config.rangeHigh());
+        //System.out.println("Range - Low: " + config.rangeLow());
+
+      config.debugMessage().ifPresent(System.out::println);
     }
 
     public boolean isValidAmount(int amount) {
-        if (DEBUG_ENABLED) {
+        if (config.debugEnabled()) {
             debugRanges();
         }
 
-        return amount >= RANGE_LOW && amount <= RANGE_HIGH;
+        return amount >= config.rangeLow() && amount <= config.rangeHigh();
     }
 }
